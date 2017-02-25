@@ -1,0 +1,47 @@
+#! /usr/bin/env python
+
+from my_utils.run import *
+import argparse
+
+####################
+# top level parser
+parser = argparse.ArgumentParser(prog = "my_utils", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+parser.add_argument("--version", action = "version", version = "my_utils-0.1.0")
+
+subparsers = parser.add_subparsers()
+
+####################
+
+
+####################
+# get sequence
+get_seq = subparsers.add_parser("get_seq", 
+                                help = "Extract DNA sequences from specified reference genome",
+                                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+get_seq.add_argument("reference", metavar = "reference.fa", type = str,
+                     help = "path to reference genome")
+
+get_seq.add_argument("region", metavar = "region", type = str,
+                     help = "target region (e.g., 3:1000-2000)")
+
+get_seq.set_defaults(func = get_seq_main)
+
+####################   
+# reverse_complement
+ 
+reverse_complement = subparsers.add_parser("reverse_complement",
+                                           help = "take reverse complement of the input DNA sequence",
+                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+reverse_complement.add_argument("seq_str", metavar = "seq_str", default = None, type = str,
+                                help = "input DNA sequence")
+
+reverse_complement.set_defaults(func = reverse_complement_main)
+
+####################
+
+args = parser.parse_args()
+
+args.func(args)          
